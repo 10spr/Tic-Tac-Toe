@@ -169,7 +169,7 @@ function scan54(scangrid54a, scansqrt54b, scanwin54) {
 
   /* ====== Grid Slider Range ====== Status: PASSED ====== */
 function editgrid54() {
-  document.getElementById('gridspan54').innerHTML = "<input type=\'range\' min=\'9\' max=\'1600\' value=\'" + grid54 + "\' class=\'slider\' id=\'gridrange54\'>"
+  document.getElementById('gridspan54').innerHTML = "<input type=\'range\' min=\'9\' max=\'3600\' value=\'" + grid54 + "\' class=\'slider\' id=\'gridrange54\'>"
 }
 editgrid54()
 document.getElementById('gridvaluespan54').innerHTML = document.getElementById('gridrange54').value
