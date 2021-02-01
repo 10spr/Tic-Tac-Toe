@@ -505,4 +505,4 @@ document.getElementById('showsetting').onclick = function() {sidebarOut()}
 
 
 
-console.log('\n\nI\'m taking a break from this project (Feb 01 2021 2:30pm GMT+0700).\n\nMost of my ideas have been completely integrated but there are still a few left that I will have to do in the future:\n\n1. Display a sound on every click.\n\n2. Allowing players to choose their own custom characters/symbols display.\n\n3. Creating a 1 player mode where you can compete with a machine.\n\n10spr' )
+console.log('\n\nI\'m taking a break from this project (Feb 01 2021 2:30pm GMT+0700).\n\nMost of my ideas have been completely integrated but there are still a few left that I will have to do in the future:\n\n1. Display a sound on every click.\n\n2. Display a whose turn it is (whether it\' X or O...) throughout the whole game.\n\n3. Allowing players to choose their own custom characters/symbols display.\n\n4. Creating a 1 player mode where you can compete with a machine.\n\n10spr')
