@@ -1,7 +1,7 @@
 console.log("\n\nI started working on this project on Wednesday Night (27, Jan, 2021), after I ate dinner.\n\n10spr")
 /* ===== START SECTION 54 ===== */
 
-a54 = document.getElementById('container54'), latest54x = '',zid = document.getElementById(btnid54), click54 = 0, grid54 = 900, gridchange54 = grid54, sqrt54x = Math.sqrt(gridchange54), win54 = 5, winchange54 = win54, wh54 = 1500, axis54x=0, axis54y=0, axis54y2 = 0, sqrt54 = Math.sqrt(grid54), winx54x = 0, winx54o = 0, iwin54=0, winx54 = 0, loca54html='', loca54html2='', loca54 = 0, loca54a = 0, iwin54=0, loca54b = 0, loca54id2='', loca54id3='', center54fullid='';
+a54 = document.getElementById('container54'), latest54x = '',zid = document.getElementById(btnid54), click54 = 0, grid54 = 900, gridchange54 = grid54, sqrt54x = Math.sqrt(gridchange54), win54 = 5, winchange54 = win54, wh54 = 2000, axis54x=0, axis54y=0, axis54y2 = 0, sqrt54 = Math.sqrt(grid54), winx54x = 0, winx54o = 0, iwin54=0, winx54 = 0, loca54html='', loca54html2='', loca54 = 0, loca54a = 0, iwin54=0, loca54b = 0, loca54id2='', loca54id3='', center54fullid='';
 var gridvalue54, gridsqrt54, win54no, btnid54, xwintime54=0, owintime54=0, twintime54=0, uwintime54=0, hwintime54=0, players = 2, click54w = 1;
 var firstclick54='X', secondclick54='O', thirdclick54='T', fourthclick54 = 'U', fifthclick54 = 'H';
 var playersclick = [firstclick54, secondclick54, thirdclick54, fourthclick54, fifthclick54];
