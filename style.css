@@ -103,7 +103,7 @@ div#container54 button {
   color: black;
   font-weight:lighter;
   margin:0px;
-  padding: 0px;
+  padding: 0px !important;
 }
 
 .turnbutton54 button {
