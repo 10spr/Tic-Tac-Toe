@@ -15,6 +15,7 @@ function showbtn54(gridvalue54, gridsqrt54, win54no) {
   a54.style.borderLeft += "1px solid black"
   a54.style.borderRight += "1px solid black"
   a54.style.borderBottom += "1px solid black"
+  a54.style.overflow += "hidden";
   ratio54 = (wh54 / gridsqrt54)
   font54 = ratio54 / 1.25
 
