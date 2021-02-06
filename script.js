@@ -1,78 +1,124 @@
 console.log("\n\nI started working on this project on Wednesday Night (27, Jan, 2021), after I ate dinner.\n\n10spr")
 /* ===== START SECTION 54 ===== */
 
-a54 = document.getElementById('container54'), latest54x = '',zid = document.getElementById(btnid54), click54 = 0, grid54 = 900, gridchange54 = grid54, sqrt54x = Math.sqrt(gridchange54), win54 = 5, winchange54 = win54, wh54 = 2000, axis54x=0, axis54y=0, axis54y2 = 0, sqrt54 = Math.sqrt(grid54), winx54x = 0, winx54o = 0, iwin54=0, winx54 = 0, loca54html='', loca54html2='', loca54 = 0, loca54a = 0, iwin54=0, loca54b = 0, loca54id2='', loca54id3='', center54fullid='';
+a54 = document.getElementById('container54'), latest54x = '',zid = document.getElementById(btnid54);
+var click54 = 0, grid54 = 625, defaultGrid = 625,/* grid54 must equal defaultGrid during the start */ gridchange54 = grid54, maxgrid = 3600, sqrt54x = Math.sqrt(gridchange54);
+var win54 = 5, winchange54 = win54, wh54 = 2000, axis54x=0, axis54y=0, axis54y2 = 0, sqrt54 = Math.sqrt(grid54), winx54x = 0, winx54o = 0, iwin54=0, winx54 = 0, loca54html='', loca54html2='', loca54 = 0, loca54a = 0, iwin54=0, loca54b = 0, loca54id2='', loca54id3='', center54fullid='';
 var gridvalue54, gridsqrt54, win54no, btnid54, xwintime54=0, owintime54=0, twintime54=0, uwintime54=0, hwintime54=0, players = 2, click54w = 1;
 var firstclick54='X', secondclick54='O', thirdclick54='T', fourthclick54 = 'U', fifthclick54 = 'H';
 var playersclick = [firstclick54, secondclick54, thirdclick54, fourthclick54, fifthclick54];
 var ratio54 = 0; font54 = 0, turns = ['first', 'second', 'third', 'fourth', 'fifth'];
+var prvWinners = [], prvClicks = [], prvClicksLength = prvClicks.length, prvClicksX=[], prvClicksO=[], latestID = [], latestHTML = [], undoNumber = 0, shadowspan = 50, shadowlimit = defaultGrid + shadowspan, extraSpan = 61, machineTurn=0;
 
   /* ====== Button Generator. Status: PASSED ====== */
-function showbtn54(gridvalue54, gridsqrt54, win54no) {
+function showbtn54() {
   a54.style.width = wh54 + "px";
   a54.style.height += wh54 + "px";
   a54.style.margin += "10px";
   a54.style.borderLeft += "1px solid black"
   a54.style.borderRight += "1px solid black"
   a54.style.borderBottom += "1px solid black"
-  a54.style.overflow += "hidden";
-  ratio54 = (wh54 / gridsqrt54)
+  a54.style.overflow += "hidden"
+  ratio54 = (wh54 / sqrt54x)
   font54 = ratio54 / 1.25
 
-  for(i=0;i<gridvalue54;i++){
+  for(i=0;i<gridchange54;i++){
     i54 = i+1
     btnid54 = 'btn54x' + i54;
     a54.innerHTML += "<button id=\'" + btnid54 + "\'>" + "&nbsp;" + "</button>"
-    btnid54x2 = 'btn54click(' + btnid54 + ', ' + gridvalue54 + ', ' + gridsqrt54 + ', ' + win54no + ')'
+    btnid54x2 = 'btn54click(' + btnid54 + ')'
     document.getElementById(btnid54).setAttribute('onclick',btnid54x2)
   }
 
   document.getElementById('styledit').innerHTML = "<style>#main button{width: " + ratio54 +"px; height: " + ratio54 + "px; font-size: " + font54 + "px}</style>"
 }
-showbtn54(grid54, sqrt54, win54)
+showbtn54()
+
+function showspan() { // Generate span elements to store buttons
+  for(xyxx=1; xyxx<extraSpan; xyxx++) {
+    spanID = 'extrabtn' + xyxx
+    a54.innerHTML += "<span id=\'" + spanID + "\'></span>"
+  }
+}
+showspan()
+
+
+function shadowbtn(shadowSpanID) { // Generate buttons and put them in the span element
+  let shadowbtnvalue = defaultGrid + 1;
+
+  for(;shadowbtnvalue<=shadowlimit;shadowbtnvalue++) {
+    shadowbtnid = 'btn54x' + shadowbtnvalue;
+    document.getElementById(shadowSpanID).innerHTML += "<button id=\'" + shadowbtnid + "\' style=\'display: none\'>&nbsp;</button>"
+  }
+  shadowlimit+= shadowspan
+  defaultGrid+= shadowspan
+}
 
 
   /* ====== DISPLAY X or O ====== Status: PASSED ====== */
-
-function btn54click(clickidx, clickscangrid54a, clickscansqrt54b, clickwin54) {
-  if(click54w == 1) {
-    if(clickidx.innerHTML !== '&nbsp;') {
-      click54 -= 1
-      click54w -= 1
-    } else {
-        clickidx.innerHTML = firstclick54
-      }
-  }
-
-  function btn54clickif(clicksnumber, clicksletter) {
-    if(click54w == clicksnumber) {
-      if(clickidx.innerHTML !== '&nbsp;') {
-        click54 -= 1
+  //The concept of this function is to display 'X' or 'O' whenever click54w is 1 or 2.
+  //If there are 3 players, the thirdclick is 'T'. This meams, whenever click54w is 3, it will display T then change click54w value to 1 back to let X display on the next click.
+function btn54click(clickidx) {
+  if(iwin54!==winchange54){
+    if(click54w == 1) {
+      if(clickidx.innerHTML !== '&nbsp;') { // This is to prevent overiding on exisiting clicks
+        click54 -= 1 // Because click54 and click54w will increase by 1 everytime this function is called, I'll decrease it first and let it decrease so that the final value won't change
         click54w -= 1
       } else {
-          clickidx.innerHTML = clicksletter
-          if(players == clicksnumber) {
-            click54w = 0
+          clickidx.innerHTML = firstclick54
+          prvClicks.push(clickidx.id)
+          prvClicksX.push(clickidx.id)
+          if(players==1){
+            machineTurn += 1
+            setTimeout(machinex,500)
           }
         }
     }
-  }
 
-  for(clicksloop=2; clicksloop<=players; clicksloop++) {
-    btn54clickif(clicksloop, playersclick[clicksloop-1])
-  }
+    function btn54clickif(clicksnumber, clicksletter) { //Example: btn54clickif(2,'O')
+      if(click54w == clicksnumber) {
+        if(clickidx.innerHTML !== '&nbsp;') {
+          click54 -= 1
+          click54w -= 1
+        } else {
+            clickidx.innerHTML = clicksletter
+            prvClicks.push(clickidx.id)
+            prvClicksO.push(clickidx.id)
+            if(players == clicksnumber) {
+              click54w = 0
+            }
+            if(players == 1) {
+              click54w = 0
+            }
+          }
+      }
+    }
 
-  click54 += 1
-  click54w +=1
-  document.getElementById('clicksno54').innerHTML = click54;
-  scan54(clickscangrid54a, clickscansqrt54b, clickwin54)
-  y = clickidx.id // For LatestClick54 Function
-  latestvar54(y) // For LatestClick54 Function
+    if(players==1) {
+      playersloopNo = players + 1
+    } else {
+      playersloopNo = players
+    }
+
+    for(clicksloop=2; clicksloop<=playersloopNo; clicksloop++) {
+      btn54clickif(clicksloop, playersclick[clicksloop-1])
+    }
+
+    click54 += 1 //For displaying the total amount of clicks in the sidenav
+    click54w +=1
+    document.getElementById('clicksno54').innerHTML = click54;
+    scan54() //Check for a winner everytime a button is clicked
+    latestID = [] // For Undo & Redo
+    latestHTML = [] // For Undo & Redo
+    undoNumber = 0; // For Undo & Redo
+    undoredobtn() // For Undo & Redo
+    prvClicksLength = prvClicks.length // For 1 player mode - machine()
+  }
 }
 
 
   /* ======== SCAN FUNCTION ======== */
-function scan54(scangrid54a, scansqrt54b, scanwin54) {
+function scan54() {
 
   function globalHTML54a(html54) { // This is used in the scan54() function
     loca54html = document.getElementById(html54).innerHTML
@@ -82,34 +128,34 @@ function scan54(scangrid54a, scansqrt54b, scanwin54) {
     document.getElementById(style54).style.background = "#7deb34"
   }
 
-  for(i=0; i<scangrid54a; i++) { // Loop Function Starts with Button 1 till Grid Number
+  for(i=0; i<gridchange54; i++) { // Loop Function Starts with Button 1 till Grid Number
     loca54 = i+1 // Button ID Number
     loca54id = 'btn54x' + loca54 // Button ID
-    axis54x = loca54 % scansqrt54b //x-axis (Top to Bottom)
+    axis54x = loca54 % sqrt54x //x-axis (Top to Bottom)
     if(axis54x==0) { // 56/8 remainder = 0;
-      axis54x = scansqrt54b;
+      axis54x = sqrt54x;
     }
-    axis54y = Math.ceil(loca54/scansqrt54b) // y-axis (Top to Bottom)
+    axis54y = Math.ceil(loca54/sqrt54x) // y-axis (Top to Bottom)
 
     globalHTML54a(loca54id) // Get the innerHTML of the button
 
     function winner54(winner54, winx54, method54, loop54a, loop54b) {
       if(loca54html==winner54) { // If button id.... equals letter "X" or "O". Note: this is and can be determined in the function parameter.
-        axis54y2 = axis54y+scansqrt54b-1; // A copy of axis54y. I'll need to edit the value of axis54y so I'm making a copy to not lose the original value.
+        axis54y2 = axis54y+sqrt54x-1; // A copy of axis54y. I'll need to edit the value of axis54y so I'm making a copy to not lose the original value.
 
         for(i54a=axis54x,i54b=1 ; loop54b>=i54b && i54a >= loop54a; i54a--, i54b++) {
 
           if(method54==1){ //Horizontal Method
-            loca54a = scansqrt54b * (axis54y-1) + i54a //Find the current location. With the loop, location will always move left by 1 step at a time
+            loca54a = sqrt54x * (axis54y-1) + i54a //Find the current location. With the loop, location will always move left by 1 step at a time
           }
           if(method54==2){ //Vertical Method.
-            loca54a = scansqrt54b * (axis54y-i54b) + axis54x //Find the current location. With the loop, location will always move left by 1 step at a time
+            loca54a = sqrt54x * (axis54y-i54b) + axis54x //Find the current location. With the loop, location will always move left by 1 step at a time
           }
           if(method54==3){ //Vertical Method.
-            loca54a = scansqrt54b * (axis54y-i54b) + axis54x -i54b +1 //Find the current location. With the loop, location will always move left by 1 step at a time
+            loca54a = sqrt54x * (axis54y-i54b) + axis54x -i54b +1 //Find the current location. With the loop, location will always move left by 1 step at a time
           }
           if(method54==4){ //Vertical Method.
-            loca54a = scansqrt54b * (axis54y-i54b) + axis54x +i54b  -1//Find the current location. With the loop, location will always move left by 1 step at a time
+            loca54a = sqrt54x * (axis54y-i54b) + axis54x +i54b  -1//Find the current location. With the loop, location will always move left by 1 step at a time
           }
 
           loca54id2 = 'btn54x' + loca54a
@@ -119,34 +165,36 @@ function scan54(scangrid54a, scansqrt54b, scanwin54) {
           }
           globalHTML54b(loca54id2)
 
-          if(loca54html2==winner54) { // Scoring System. Status: Passed. Details: If winx54x = 4 (it's the value of variable scanwin54), there is a winner.
+          if(loca54html2==winner54) { // Scoring System. Status: Passed. Details: If winx54x = 4 (it's the value of variable winchange54), there is a winner.
             winx54 += 1;
           } else {
             winx54 = 0;
           }
 
-          if(winx54 == scanwin54) { // Whenever someone wins
-            for(iwin54=0;iwin54<scanwin54;iwin54++) {
+          if(winx54 == winchange54) {
+            prvWinners=[] // Whenever someone wins
+            for(iwin54=0;iwin54<winchange54;iwin54++) {
               if(method54==1) {
                 loca54b = loca54a + iwin54
               }
               if(method54==2) {
-                loca54b = loca54a + (iwin54 * scansqrt54b)
+                loca54b = loca54a + (iwin54 * sqrt54x)
               }
               if(method54==3) {
-                loca54b = loca54a + (iwin54 * scansqrt54b) +iwin54
+                loca54b = loca54a + (iwin54 * sqrt54x) +iwin54
               }
               if(method54==4) {
-                loca54b = loca54a + (iwin54 * scansqrt54b) -iwin54
+                loca54b = loca54a + (iwin54 * sqrt54x) -iwin54
               }
               loca54id3 = 'btn54x' + loca54b
+              prvWinners.push(loca54id3)
               globalstyle54(loca54id3) //change background color to green
             }
-            someonewin54(loca54html)
-            click54w = 1;
+            //openModal() //Displaying PopUp Modal
+            someonewin54(loca54html) //for displaying number of wins
             break;
           }
-          if(iwin54 == scanwin54) {
+          if(iwin54 == winchange54) {
             break;
           }
         }
@@ -156,12 +204,12 @@ function scan54(scangrid54a, scansqrt54b, scanwin54) {
     // Syntax winner54(winner54, winx54, method54, loop54a, loop54b)
     for(iplayers=0; iplayers < players; iplayers++) {
       winner54(playersclick[iplayers], winx54x, 1, 1, axis54y2); //Horizontal X (Method 1)
-      winner54(playersclick[iplayers], winx54x, 2, -scansqrt54b+2, axis54y); //Vertical X (Method 2)
+      winner54(playersclick[iplayers], winx54x, 2, -sqrt54x+2, axis54y); //Vertical X (Method 2)
       winner54(playersclick[iplayers], winx54o, 3, 1, axis54y); //Diagonal Left X (Method 3)
-      winner54(playersclick[iplayers], winx54x, 4, -1*scanwin54+2, axis54y); //Diagonal Right X (Method 4)
+      winner54(playersclick[iplayers], winx54x, 4, -1*winchange54+2, axis54y); //Diagonal Right X (Method 4)
     }
 
-    if(iwin54 == scanwin54) {
+    if(iwin54 == winchange54) {
       break;
     }
   }
@@ -170,7 +218,7 @@ function scan54(scangrid54a, scansqrt54b, scanwin54) {
 
   /* ====== Grid Slider Range ====== Status: PASSED ====== */
 function editgrid54() {
-  document.getElementById('gridspan54').innerHTML = "<input type=\'range\' min=\'9\' max=\'3600\' value=\'" + grid54 + "\' class=\'slider\' id=\'gridrange54\'>"
+  document.getElementById('gridspan54').innerHTML = "<input type=\'range\' min=\'9\' max=\'" + maxgrid + "\' value=\'" + grid54 + "\' class=\'slider\' id=\'gridrange54\'>"
 }
 editgrid54()
 document.getElementById('gridvaluespan54').innerHTML = document.getElementById('gridrange54').value
@@ -180,27 +228,30 @@ gridrange54.oninput = function() {
 }
 
   /* ====== Confirm Grid Change ====== Status: PASSED ====== */
+var btnpixel = 80;
 function confirmgrid54() {
   gridchange54 = Math.pow(Math.ceil(Math.sqrt(gridrange54.value)), 2)
   sqrt54x = Math.sqrt(gridchange54)
 
-  if(grid54>gridchange54){ // Determine whether to add or remove buttons
-    for(gridremove54 = gridchange54+1; gridremove54 <= grid54; gridremove54++) { // A loop to remove buttons
+  if(grid54>gridchange54){ // This means the grids are decreasing
+    for(gridremove54 = gridchange54+1; gridremove54 <= grid54; gridremove54++) { // A loop to set buttons display to none
       confirmgrid54xid = 'btn54x' + gridremove54
-      document.getElementById(confirmgrid54xid).remove()
+      document.getElementById(confirmgrid54xid).setAttribute('style', 'display: none')
     }
+    btnpixel += 10 // For animation
   } else {
-    for(gridadd54 = grid54+1; gridadd54<=gridchange54; gridadd54++) { // A loop to add buttons
+    for(gridadd54 = grid54+1; gridadd54<=gridchange54; gridadd54++) { // A loop to remove buttons style display
       confirmgridadd54id = 'btn54x' + gridadd54
-      document.getElementById('container54').innerHTML += "<button id=\'" + confirmgridadd54id + "\'>&nbsp;</button"
+      document.getElementById(confirmgridadd54id).removeAttribute('style')
+      confirmgrid54xonclick = 'btn54click(' + confirmgridadd54id + ')'
+      document.getElementById(confirmgridadd54id).setAttribute('onclick', confirmgrid54xonclick)
     }
+    btnpixel -= 10 // For animation
   }
 
-  for(gridremove54x=1; gridremove54x <= gridchange54; gridremove54x++) { // Changing the onclick attribute to a new one
-    confirmgrid54xid2 = 'btn54x' + gridremove54x
-    confirmgrid54xonclick = 'btn54click(' + confirmgrid54xid2 + ', ' + gridchange54 + ', ' + sqrt54x + ', ' + winchange54 + ')'
-    document.getElementById(confirmgrid54xid2).setAttribute('onclick', confirmgrid54xonclick)
-  }
+  wh54 = btnpixel * sqrt54x // Making each buttons 80x80px
+  a54.style.width = wh54 + 'px' //Redefining the width and height of the div container
+  a54.style.height = wh54 + 'px'
 
   ratio54 = (wh54 / sqrt54x) //The 3 lines of codes below (counting this line too) is to change the css of the buttons
   font54 = ratio54 / 1.25
@@ -208,9 +259,6 @@ function confirmgrid54() {
 
   gridvaluespan54.innerHTML = gridchange54 // Displaying the new number of grids
   clean54(gridchange54)
-  click54 = 0;
-  click54w = 1;
-  document.getElementById('clicksno54').innerHTML = click54;
   grid54 = gridchange54
 }
 
@@ -230,15 +278,7 @@ winrange54.oninput = function() {
   /* ====== Confirm Win Change ====== Status: PASSED ====== */
 function confirmwin54() {
   winchange54 = parseFloat(winrange54.value)
-  for(confirmwin54i=1; confirmwin54i<=gridchange54; confirmwin54i++){
-    confirmwin54id = 'btn54x' + confirmwin54i
-    confirmwin54onclick = 'btn54click(' + confirmwin54id + ', ' + gridchange54 + ', ' + sqrt54x + ', ' + winchange54 + ')'
-    document.getElementById(confirmwin54id).setAttribute('onclick', confirmwin54onclick)
-  }
   clean54(gridchange54)
-  click54 = 0;
-  click54w = 1;
-  document.getElementById('clicksno54').innerHTML = click54;
 }
 
 
@@ -252,10 +292,7 @@ function setplayer(playerid2x, playerno2x) {
     }
     document.getElementById(playerid2x).style.opacity = '1' // Then set the activated player button to opacity 1
 
-    clean54(gridchange54) // Clean the whole grid
-    click54 = 0; // Then, set the total number of clicks to 0
-    document.getElementById('clicksno54').innerHTMl = click54 // And display it
-    click54w = 1; // Re-defining the click to return the turn to the beginning
+    clean54(gridchange54) // Clean the whole grid, Then, set the total number of clicks to 0, And display it, Re-defining the click to return the turn to the beginning
 
     firstclick54='X', secondclick54='O', thirdclick54='T', fourthclick54 = 'U', fifthclick54 = 'H'; // Returning the default order of turns everytime the number of player changes
     playersclick = [firstclick54, secondclick54, thirdclick54, fourthclick54, fifthclick54];
@@ -297,10 +334,12 @@ function setplayer(playerid2x, playerno2x) {
 
     if(players>=1) {
       firstturn54x('xfirst54', 'X')
+      document.getElementById('ofirst54').style.display = 'none'
     }
 
     if(players>=2) {
       firstturn54x('ofirst54', 'O')
+      document.getElementById('ofirst54').style.display = ''
     }
 
     if(players>=3) {
@@ -351,17 +390,21 @@ setplayerloop()
 
 
 /* ======== The First To Go ======== */
-
 // The idea here is to swap between each in letter in each click. Example: The first turn is 'X'. If the 3rd button is clicked which is 'T', then the position of X will swap with T, which means T will will be first, X will be third.
 function firstturn54x(turnid, turnletter) {
-  document.getElementById(turnid).addEventListener('click', function(){firstturn54y(turnid, turnletter)} )
+  document.getElementById(turnid).onclick = function(){firstturn54y(turnid, turnletter)}
 }
 
 var turnloop = 0, turnloopref = turnloop+1, iturn = 0;
 
 function firstturn54y(turnid2, turnletter2) {
+  if(players==1){ // This is for 1 player mode
+    playersturn = players
+  } else {
+    playersturn = players
+  }
 
-  for(turnloop=0; turnloop<players; turnloop++) { // Capture the previous first click and swap it with its new position
+  for(turnloop=0; turnloop<playersturn; turnloop++) { // Capture the previous first click and swap it with its new position
     if(playersclick[turnloop] == turnletter2) {
       turnloopref = turnloop + 1;
       if(turnloopref == 1) {
@@ -386,32 +429,33 @@ function firstturn54y(turnid2, turnletter2) {
   firstclick54 = turnletter2
   playersclick[0] = firstclick54
 
-  for(iturn=0; iturn<players; iturn++) {
+  for(iturn=0; iturn<playersturn; iturn++) {
     firstturnid2 = playersclick[iturn].toLowerCase() + 'first54'
     document.getElementById(firstturnid2).style.opacity = '0.3'
   }
   document.getElementById(turnid2).style.opacity = '1'
   clean54(gridchange54)
-  click54 = 0;
-  click54w = 1;
-  document.getElementById('clicksno54').innerHTML = click54;
 }
 
 firstturn54x('xfirst54', 'X')
 firstturn54x('ofirst54', 'O')
 
 /* ====== Number of Wins ====== Status: PASSED ====== */
-function wintime54(wintime54id, wintime54letter) {
-  if(wintime54letter>1) {
-    document.getElementById(wintime54id).innerHTML = wintime54letter + ' times';
+function wintime54(wintime54id, wintime54number) {
+  let wintime54idx = document.getElementById(wintime54id);
+
+  if(wintime54number>1) {
+    wintime54idx.innerHTML = wintime54number + ' times';
   } else {
-    document.getElementById(wintime54id).innerHTML = wintime54letter + ' time';
+    wintime54idx.innerHTML = wintime54number + ' time';
   }
 }
+
 wintime54('xwintime54', xwintime54)
 wintime54('owintime54', owintime54)
 
 function someonewin54(winletter54) {
+
   if(winletter54=='X'){
     xwintime54 +=1
     wintime54('xwintime54', xwintime54)
@@ -435,28 +479,41 @@ function someonewin54(winletter54) {
 }
 
 
-/* ====== Remove all letters from all buttons (grids) ====== */
+/* ====== CLEAN FUNCTION - Remove all letters from all buttons (grids) ====== */
 function clean54(cleangrid54) {
-for(icl54=1; icl54<=cleangrid54; icl54++) {
-  clean54id = 'btn54x' + icl54;
-  nbsp54(clean54id)
-}
-  click54 = 0;
-  iwin54 = 0;
-  click54w = 1;
-  document.getElementById('clicksno54').innerHTML = click54;
+  prvClicksLength = prvClicks.length, prvWinnersLength = prvWinners.length;
+
+  for(icl54=0; icl54<prvClicksLength; icl54++) {
+    clean54id = prvClicks[icl54]
+    document.getElementById(clean54id).innerHTML = "&nbsp;"
+  }
+
+  for(icl54x=0; icl54x<prvWinnersLength; icl54x++) { // Display the previous winner buttons' background color to #fff
+    let prvWinnersID = prvWinners[icl54x]
+    document.getElementById(prvWinnersID).style.background = "#fff"
+  }
+
+    iwin54 = 0; // Reset wins
+    click54w = 1; // For click turns
+    // For number of clicks
+    click54 = 0;
+    document.getElementById('clicksno54').innerHTML = click54;
+    // For Undo and Redo
+    prvClicks = []
+    undoNumber = 0;
+    undoredobtn()
+    // For 1 player mode
+    prvClicksO = []
+    prvClicksX = []
+    machineRef = 0;
 }
 
 document.getElementById('restart54').addEventListener('click', function() {clean54(gridchange54)})
 
-function nbsp54(cleanid54a) {
-  document.getElementById(cleanid54a).innerHTML = "&nbsp;"
-  document.getElementById(cleanid54a).style.background = "#fff"
-}
-
-/* ======== Latest Click ======== Note: This whole function is connected to the function btn54click()*/
-function latestclick54(latest54) {
-  var clickid54style = document.getElementById(latest54).style.background
+/* ======== Latest Click ======== */
+function latestclick54() { // This uses the prvClicks array to accessed the latest click button
+  latest54 = prvClicks[prvClicks.length - 1]
+  let clickid54style = document.getElementById(latest54).style.background
   document.getElementById(latest54).style.background="#000"
   setTimeout(function(){
     if(clickid54style=='rgb(125, 235, 52)') {
@@ -466,44 +523,335 @@ function latestclick54(latest54) {
   }}, 500)
 }
 
-function latestvar54(latestvar54) {
-  latest54x = latestvar54
-}
-
 /* ====== Hide & Show Sidebar Settings ====== Status: PASSED ====== */
-function sidebarIn() {
-  document.getElementById('sidenav').style.left = "-25%"
-  document.getElementById('main').style.marginLeft = '0px'
-  document.getElementById('main').style.paddingLeft = '0px'
-  document.getElementById('showsetting').style.opacity = '0.3'
-  document.getElementById('hidesetting').style.opacity = '1'
-}
-
 function sidebarOut() {
-  document.getElementById('sidenav').style.left = "0%"
+  let sidebarWidth = window.innerWidth
+  let outerContainer = document.getElementById('container54')
+
+  document.getElementById('sidenav').style.left = "0%" // I'm using left to make it look animated like the sidenav is moving
   document.getElementById('main').style.marginLeft = '20%'
   document.getElementById('main').style.paddingLeft = '20px'
-  document.getElementById('showsetting').style.opacity = '1'
-  document.getElementById('hidesetting').style.opacity = '0.3'
+
+  if(sidebarWidth<1000) {
+    document.getElementById('styledit').innerHTML += "<div id=\'styledit2\'><style>#firstcontainer54 {opacity: 0.3}</style></div>"
+  }
+  document.getElementById('showsetting').onclick = function() {sidebarIn()}
+  document.getElementById('showsetting').innerHTML = "Hide Settings"
 }
 
-document.getElementById('hidesetting').onclick = function() {sidebarIn()}
-document.getElementById('showsetting').onclick = function() {sidebarOut()}
+function sidebarIn() {
+  let sidebarWidth = window.innerWidth
+  if(sidebarWidth>999) {
+    document.getElementById('sidenav').style.left = "-25%"
+  } else {
+    document.getElementById('sidenav').style.left = "-55%"
+    if(document.getElementById('styledit2')!==null) {
+      document.getElementById('styledit2').remove()
+    }
+  }
+  document.getElementById('main').style.marginLeft = '0px'
+  document.getElementById('main').style.paddingLeft = '0px'
+  document.getElementById('showsetting').onclick = function() {sidebarOut()}
+  document.getElementById('showsetting').innerHTML = "Show Settings"
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if(window.innerWidth>999) { // Determining whether to hide or show the side bar onload, making it a responsive webpage.
+  sidebarOut()
+} else {
+  sidebarIn()
+}
 
 console.log('\n\nI\'m taking a break from this project (Feb 01 2021 2:30pm GMT+0700).\n\nMost of my ideas have been completely integrated but there are still a few left that I will have to do in the future:\n\n1. Display a sound on every click.\n\n2. Display a whose turn it is (whether it\' X or O...) throughout the whole game.\n\n3. Allowing players to choose their own custom characters/symbols display.\n\n4. Creating a 1 player mode where you can compete with a machine.\n\n10spr')
+
+/* ====== Show PopUp Modal Whenever Someone Wins ====== Status: PASSED ====== */
+
+function openModal() { // Currently not using it because it doesn't look that good
+  let modal = document.getElementById('myModal')
+  let modalWinner = document.getElementById(loca54id3).innerHTML
+
+  document.getElementById('modalText').innerHTML = 'Congratulations, \"' + modalWinner + '\" won!'
+  modal.style.display = "block"
+
+  document.getElementsByClassName("close")[0].onclick = function() {
+    modal.style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+}
+
+/* ====== Undo & Redo ====== Status: Completed ====== */
+function undo() { // When undo() is called, it will push the latest button clicked into an array called latestID and latestHTML to store the values.
+  if(undoNumber<players) { // This is to allow users to undo no more than 1 time for each players
+    if(prvClicks.length>0){ //
+      latestID.push(prvClicks[prvClicks.length-1]) //ID of the latest click
+      latestHTML.push(document.getElementById(latestID[undoNumber]).innerHTML) //InnerHTML of the latest click
+      document.getElementById(latestID[undoNumber]).innerHTML = "&nbsp;"
+      prvClicks.pop()
+
+      if(click54w>1) {
+        click54w -= 1
+      } else {
+        click54w = players
+      }
+      click54 -= 1
+      document.getElementById('clicksno54').innerHTML = click54;
+      undoNumber += 1;
+      undoredobtn()
+    }
+  }
+}
+
+function redo() {
+  if(undoNumber<=players && undoNumber>0) {
+    if(latestID!=='') {
+      prvClicks.push(latestID[undoNumber-1])
+      document.getElementById(latestID[undoNumber-1]).innerHTML = latestHTML[undoNumber-1]
+      click54 += 1
+      click54w += 1
+      document.getElementById('clicksno54').innerHTML = click54;
+
+      if(click54w>players) {
+        click54w = 1
+      }
+      latestHTML.pop()
+      latestID.pop()
+      undoNumber -= 1;
+      undoredobtn()
+    }
+  }
+}
+
+function undoredobtn() { // Changing the opacity of the undo and redo buttons
+  if(click54>0 && undoNumber < players) {
+    document.getElementById('undo').style.opacity = '1'
+  } else {
+    document.getElementById('undo').style.opacity = '0.3'
+  }
+  if(undoNumber>0) {
+    document.getElementById('redo').style.opacity = '1'
+  } else {
+    document.getElementById('redo').style.opacity = '0.3'
+  }
+}
+
+document.getElementById('undo').onclick = function(){undo()}
+document.getElementById('redo').onclick = function(){redo()}
+
+/* ====== Shadow Button ====== Status: Passed */
+// The function shadowbtn() is defined above and is called at the last to wait for everything to load. This is to speed up the grid change feature.
+var shadowCallNumber = 1, shadowTime = 0;
+function shadowCall() {
+  let shadowCallID = 'extrabtn' + shadowCallNumber;
+  setTimeout(function(){shadowbtn(shadowCallID)},shadowTime)
+  shadowTime += 40
+  shadowCallNumber += 1
+}
+
+for(shadowxxx=1; shadowxxx<extraSpan; shadowxxx++) {
+  shadowCall()
+}
+
+/* ====== 1 Player Mode ====== Status: In Progress */
+var machineRef = 0, machineID = '', machineBrain=0, machineNox=0, imachine = 0, imachinex = 0, machineIDxIDref=0, machineNo=0, machine2x=0;
+
+function machine() {
+  machineBrain=Math.ceil(Math.random()*8)
+  console.log(machineBrain)
+  if(prvClicksX.length==machineRef) { // In case i
+    machineRef-=1
+  }
+
+  machineNo = parseFloat(prvClicksX[machineRef].substring(6)) //The ID number of the last clicked button
+
+  function machineBrain1() {
+    machineNox = machineNo + machine1x
+    machineID = 'btn54x' + machineNox
+    machineIDx = document.getElementById(machineID)
+
+    for(imachine=1;imachinex<sqrt54x;imachine++){ // DISPLAY RIGHT - If there are already letters in the next right button
+      if(machineNox>0 && machineNox<gridchange54) {
+        if(machineIDx.innerHTML=='X' || machineIDx.innerHTML=='O') {
+
+          console.log('phase 1') /* ==== PHASE 1 ==== */
+
+          if(machineBrain==1) { //HORIZONTAL RIGHT
+            machine2x = machineNox + imachine
+            machine3x = machine2x % sqrt54x == 1
+          }
+          if(machineBrain==2) { //HORIZONTAL LEFT
+            machine2x = machineNox - imachine
+            machine3x = machine2x % sqrt54x == 0
+          }
+          if(machineBrain==3) { //VERTICAL DOWN
+            machine2x = machineNox + sqrt54x*imachine
+            machine3x = machine2x > gridchange54
+          }
+          if(machineBrain==4) { //VERTICAL UP
+            machine2x = machineNox - sqrt54x*imachine
+            machine3x = machine2x < 1
+          }
+          if(machineBrain==5) { //DIAGONAL LEFT DOWN
+            machine2x = machineNox + sqrt54x*imachine + imachine
+            machine3x = machine2x > gridchange54
+          }
+          if(machineBrain==6) { //DIAGONAL LEFT UP
+            machine2x = machineNox - (sqrt54x*imachine + imachine)
+            machine3x = machine2x < 1
+          }
+          if(machineBrain==7) { //DIAGONAL RIGHT DOWN
+            machine2x = machineNox + sqrt54x*imachine - imachine
+            machine3x = machine2x > gridchange54 || machine2x % sqrt54x == 0
+          }
+          if(machineBrain==8) { //DIAGONAL RIGHT UP
+            machine2x = machineNox - (sqrt54x*imachine - imachine)
+            machine3x = machine2x < 1 || machine2x % sqrt54x == 1
+          }
+
+          machineID = 'btn54x' + (machine2x)
+          machineIDx = document.getElementById(machineID)
+
+          if(machine3x){ /* ==== PHASE 2 ==== */
+            console.log('phase 2')
+            machineRightx()
+          }
+        } else { /* ==== PHASE 0 ==== */
+          console.log('phase 0')
+          break
+        }
+      } else {break}
+    }
+    if(machine4x) { /* ==== PHASE 3 ==== */
+      console.log('phase 3')
+      machineRightx()
+    }
+
+    function machineRightx() {
+      for(imachinex=1;imachinex<sqrt54x;imachinex++) { /* ==== PHASE 4 - Pronounced as: I Machine X ==== */
+
+        if(machineBrain==1) { //HORIZONTAL RIGHT
+          machine5x = -imachinex
+        }
+        if(machineBrain==2) { //HORIZONTAL LEFT
+          machine5x = imachinex
+        }
+        if(machineBrain==3) { //VERTICAL DOWN
+          machine5x = -sqrt54x * imachinex
+        }
+        if(machineBrain==4) { //VERTICAL UP
+          machine5x = (imachinex*sqrt54x)
+        }
+        if(machineBrain==5) { //DIAGONAL LEFT DOWN
+          machine5x =  -1 *(imachinex*sqrt54x + imachinex)
+        }
+        if(machineBrain==6) { //DIAGONAL LEFT UP
+          machine5x =  (imachinex*sqrt54x + imachinex)
+        }
+        if(machineBrain==7) { //DIAGONAL RIGHT DOWN
+          machine5x =  -1 *(imachinex*sqrt54x - imachinex)
+        }
+        if(machineBrain==8) { //DIAGONAL RIGHT UP
+          machine5x =  (imachinex*sqrt54x - imachinex)
+        }
+
+        console.log('phase 4')
+        machineNox = machineNo + machine5x
+        machineID = 'btn54x' + machineNox // New button ID
+        machineIDx = document.getElementById(machineID)
+        if(machineIDx.innerHTML!=='X' && machineIDx.innerHTML!=='O') { // If the new button innerHTML is not X or O, then we'll accept that ID
+          break; // And break the loop
+        }
+      }
+    }
+  }
+
+  if(machineBrain==1) { //HORIZONTAL RIGHT
+    machine1x = 1
+    machine4x = machineNo%sqrt54x==0
+  }
+
+  if(machineBrain==2) { //HORIZONTAL LEFT
+    machine1x = -1
+    machine4x = machineNo%sqrt54x==1
+  }
+
+  if(machineBrain==3) { //VERTICAL DOWN
+    machine1x = sqrt54x
+    machine4x = machineNo+sqrt54x > gridchange54
+  }
+
+  if(machineBrain==4) { //VERTICAL UP
+    machine1x = -sqrt54x
+    machine4x = machineNo+machine1x < 1
+  }
+
+  if(machineBrain==5) { // DIAGONAL LEFT DOWN
+    machine1x = sqrt54x + 1
+    machine4x = machineNo + machine1x > gridchange54
+  }
+  if(machineBrain==6) { // DIAGONAL LEFT UP
+    machine1x = -1 * (sqrt54x + 1)
+    machine4x = machineNo + machine1x < 1
+  }
+  if(machineBrain==7) { // DIAGONAL RIGHT DOWN
+    machine1x = sqrt54x - 1
+    machine4x = machineNo + machine1x > gridchange54 || machineNo % sqrt54x == 1
+  }
+  if(machineBrain==8) { // DIAGONAL RIGHT DOWN
+    machine1x = 1 - sqrt54x
+    machine4x = machineNo + machine1x < 1 || machineNo % sqrt54x == 0
+  }
+
+  machineBrain1()
+
+  machineIDx = document.getElementById(machineID)
+  btn54click(machineIDx)
+
+  machineRef+=1
+  machineTurn += 1
+}
+
+function machinex() { // To automatically call the function machine()
+  if(machineTurn%2==1) {
+    machine()
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+console.log('\n\nI started working on this project again on Wednesday Night 03-Feb-2021.\n\nA few things I added to this project are:\n\n1. Make it responsive on Mobile Devices and Tablets. It looked and worked better on all devices now.\n\n2. Re-designing the concepts of some functions to make the loading speed faster.\n\n3. Display a PopUp Modal eveyrtime someone wins (It\'s disabled for now because it doesn\'t look that good and it\'s not neccesary).\n\n4. Undo and Redo buttons. I planned to add FontAwesome Icons to these buttons instead but the min.css file size of FontAwesome was too big which delayed the loading speed.')
