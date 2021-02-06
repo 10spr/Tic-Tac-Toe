@@ -7,7 +7,9 @@
 <body>
   <div class="header">
     <button id='showsetting' style='opacity:1'>Show Settings</button>
-    <button id='hidesetting' style='opacity:0.3'>Hide Settings</button>
+
+    <button id='undo' style='opacity:0.3'>Undo</button>
+    <button id='redo' style='opacity:0.3'>Redo</button>
     <div class="header-right">
       <a class="logo">Tic Tac Toe<sub>10spr</sub></a>
     </div>
@@ -16,7 +18,7 @@
   <div class="sidenav" id="sidenav">
     <p><br>Number of Grids: <span id="gridvaluespan54"></span> <span id="gridspan54"></span><button id="confirmgrid54" onclick="confirmgrid54()">Confirm Grid</button></p>
     <p>Tic Tac Toe: Game of <span id="win54at"></span> <span id="winspan54"></span><button id="confirmwin54" onclick="confirmwin54()" class="button2">Confirm Change</button></p>
-    <p>Number of players:)<br>
+    <p>Number of players:<br>
       <span id='playersbtn54container'>
         <button id="player1">1</button><button id="player2" style='opacity: 1'>2</button><button id="player3">3</button><button id="player4">4</button><button id="player5">5</button>
       </span>
@@ -28,12 +30,22 @@
     </p>
     <button id='restart54' style='margin-top: 0px'>Clean Grid</button>
     <p>Clicks: <span id="clicksno54">0</span>
-    <button id='lastclick54' class="button2" onclick='latestclick54(latest54x)'>Latest Click</button></p>
+    <button id='lastclick54' class="button2" onclick='latestclick54()'>Latest Click</button></p>
+    <p>&nbsp;</p> <!-- This is to make a small space at the bottom of the sidenav since the top padding is too large-->
   </div>
 
   <div class="main" id='main'>
       <div id="firstcontainer54"><div id='container54' style='margin: 0px'></div></div>
       <div id="styledit"></div>
+      <div id="styledit2"></div>
+  </div>
+
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p id='modalText'></p>
+    </div>
   </div>
 
 </body>
