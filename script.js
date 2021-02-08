@@ -846,7 +846,7 @@ function machinescan() { // Scan each buttons. Short for "ms"
       if(msglobalref==3) {skull = j*sqrt54x} // VERTICAL DOWN - search 4 units below
       if(msglobalref==4) {skull = -(j*sqrt54x) - j} // DIAGONAL LEFT UP - search 4 units diaonally left above
       if(msglobalref==5) {skull = (j*sqrt54x) + j} // DIAGONAL LEFT DOWN - search 4 units diagonally left below
-      if(msglobalref==6) {skull = -(j*sqrt54x) + j; console.log(skull)} // DIAGONAL RIGHT UP - search 4 units diaonally right above
+      if(msglobalref==6) {skull = -(j*sqrt54x) + j} // DIAGONAL RIGHT UP - search 4 units diaonally right above
       if(msglobalref==7) {skull = (j*sqrt54x) - j} // DIAGONAL RIGHT DOWN - search 4 units diaonally right below
       msIDnox = msIDno + skull // forming new id number - 82
       msID = 'btn54x' + msIDnox // 'btn54x82'
