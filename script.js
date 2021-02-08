@@ -1,10 +1,10 @@
 console.log("\n\nI started working on this project on Wednesday Night (27, Jan, 2021), after I ate dinner.\n\n10spr")
 /* ===== START SECTION 54 ===== */
 
-a54 = document.getElementById('container54'), latest54x = '',zid = document.getElementById(btnid54);
+a54 = document.getElementById('container54');
 var click54 = 0, grid54 = 625, defaultGrid = 625,/* grid54 must equal defaultGrid during the start */ gridchange54 = grid54, maxgrid = 3600, sqrt54x = Math.sqrt(gridchange54);
-var win54 = 5, winchange54 = win54, wh54 = 2000, axis54x=0, axis54y=0, axis54y2 = 0, sqrt54 = Math.sqrt(grid54), winx54x = 0, winx54o = 0, iwin54=0, winx54 = 0, loca54html='', loca54html2='', loca54 = 0, loca54a = 0, iwin54=0, loca54b = 0, loca54id2='', loca54id3='', center54fullid='';
-var gridvalue54, gridsqrt54, win54no, btnid54, xwintime54=0, owintime54=0, twintime54=0, uwintime54=0, hwintime54=0, players = 2, click54w = 1;
+var win54 = 5, winchange54 = win54, wh54 = 2000, axis54x=0, axis54y=0, axis54y2 = 0, sqrt54 = Math.sqrt(grid54), winx54x = 0, winx54o = 0, iwin54=0, winx54 = 0, loca54html='', loca54html2='', loca54 = 0, loca54a = 0, iwin54=0, loca54b = 0, loca54id2='', loca54id3='';
+var btnid54, xwintime54=0, owintime54=0, twintime54=0, uwintime54=0, hwintime54=0, players = 2, click54w = 1;
 var firstclick54='X', secondclick54='O', thirdclick54='T', fourthclick54 = 'U', fifthclick54 = 'H';
 var playersclick = [firstclick54, secondclick54, thirdclick54, fourthclick54, fifthclick54];
 var ratio54 = 0; font54 = 0, turns = ['first', 'second', 'third', 'fourth', 'fifth'];
@@ -660,11 +660,12 @@ var machineRef = 0, machineID = '', machineBrain=0, machineNox=0, imachine = 0, 
 
 function machine() {
   machineBrain=Math.ceil(Math.random()*8)
-  console.log(machineBrain)
   if(prvClicksX.length==machineRef) { // In case i
     machineRef-=1
   }
-
+  console.log(machineBrain)
+  machinescan()
+  console.log(machineBrain)
   machineNo = parseFloat(prvClicksX[machineRef].substring(6)) //The ID number of the last clicked button
 
   function machineBrain1() {
@@ -676,7 +677,7 @@ function machine() {
       if(machineNox>0 && machineNox<gridchange54) {
         if(machineIDx.innerHTML=='X' || machineIDx.innerHTML=='O') {
 
-          console.log('phase 1') /* ==== PHASE 1 ==== */
+          /* ==== PHASE 1 ==== */
 
           if(machineBrain==1) { //HORIZONTAL RIGHT
             machine2x = machineNox + imachine
@@ -715,17 +716,14 @@ function machine() {
           machineIDx = document.getElementById(machineID)
 
           if(machine3x){ /* ==== PHASE 2 ==== */
-            console.log('phase 2')
             machineRightx()
           }
         } else { /* ==== PHASE 0 ==== */
-          console.log('phase 0')
           break
         }
       } else {break}
     }
     if(machine4x) { /* ==== PHASE 3 ==== */
-      console.log('phase 3')
       machineRightx()
     }
 
@@ -757,7 +755,7 @@ function machine() {
           machine5x =  (imachinex*sqrt54x - imachinex)
         }
 
-        console.log('phase 4')
+        /* ==== PHASE 4 ==== */
         machineNox = machineNo + machine5x
         machineID = 'btn54x' + machineNox // New button ID
         machineIDx = document.getElementById(machineID)
@@ -800,58 +798,165 @@ function machine() {
     machine1x = sqrt54x - 1
     machine4x = machineNo + machine1x > gridchange54 || machineNo % sqrt54x == 1
   }
-  if(machineBrain==8) { // DIAGONAL RIGHT DOWN
+  if(machineBrain==8) { // DIAGONAL RIGHT UP
     machine1x = 1 - sqrt54x
     machine4x = machineNo + machine1x < 1 || machineNo % sqrt54x == 0
   }
 
   machineBrain1()
-
   machineIDx = document.getElementById(machineID)
-  btn54click(machineIDx)
 
-  machineRef+=1
-  machineTurn += 1
+  if(machineNox<1 || machineNox >gridchange54) { // This IF statement is like a security measure just in case something is wrong LOL
+    machiney()
+  } else {
+    btn54click(machineIDx) // The function to display letters. This function is merely to determine 'HOW' to display automatically
+    machineRef+=1 // The machinescan() function is to determine 'WHERE to display'
+    machineTurn += 1 // Both functions work together
+  }
 }
 
-function machinex() { // To automatically call the function machine()
+function machinex() { // To automatically call the function machine(). In other words, this is for automatically displaying letters
   if(machineTurn%2==1) {
     machine()
   }
 }
 
+function machiney() { // This is just incase there are problems when the grid have maxed out. If that's the case, it will not display the button but it will retry and retry again till the button is displayed
+  setTimeout(machine, 500) /* ==== PHASE 5 ==== */
+}
+
+
+function machinescan() { // Scan each buttons. Short for "ms"
+  msglobalref=0, powerX = 0, powerO = 0, powerHole=0, jx=0;
+  prvClicksXLength = prvClicksX.length
+  msIDno = parseFloat(prvClicksX[prvClicksXLength-1].substring(6)) // The latest clicked X button 'btn54x81'
+
+  function msglobal(param1, param2, param3, param4, param5, param6, param7) {
+    powerX = 0, powerO = 0, powerHole=0;
+    if(param1) {jx = 0} // can't run the loop with 0
+    if(param2) {jx = 1} // 1 iteration
+    if(param3) {jx=2} // 2 iteration
+    if(param4) {jx=3} // 3 iteration
+    if(param5) {jx=win54-1} // 4 iteration
+
+    for(j=1; j<=jx; j++) {
+      if(msglobalref==0) {skull = j} // HORIZONTAL RIGHT - search 4 units to the right
+      if(msglobalref==1) {skull = -1*j} // HORIZONTAL LEFT- search 4 units to the left
+      if(msglobalref==2) {skull = -(j*sqrt54x)} // VERTICAL UP - search 4 units above
+      if(msglobalref==3) {skull = j*sqrt54x} // VERTICAL DOWN - search 4 units below
+      if(msglobalref==4) {skull = -(j*sqrt54x) - j} // DIAGONAL LEFT UP - search 4 units diaonally left above
+      if(msglobalref==5) {skull = (j*sqrt54x) + j} // DIAGONAL LEFT DOWN - search 4 units diagonally left below
+      if(msglobalref==6) {skull = -(j*sqrt54x) + j; console.log(skull)} // DIAGONAL RIGHT UP - search 4 units diaonally right above
+      if(msglobalref==7) {skull = (j*sqrt54x) - j} // DIAGONAL RIGHT DOWN - search 4 units diaonally right below
+      msIDnox = msIDno + skull // forming new id number - 82
+      msID = 'btn54x' + msIDnox // 'btn54x82'
+      for(h=0; h<prvClicksXLength-1; h++){ // Checking all array elements if there is msID('btn54x82') as an array element's value
+        if(prvClicksX[h]==msID) {
+          powerX += 1
+          break; // break the loop when it has confirmed that msID is inside the prvClicksX array
+        }
+      }
+      if(powerX<j) { // If 'btn54x82' is not found in the prvClicksX array elements, then break the loop and stop searching because there is a hole next to 'btn54x81'
+        if(document.getElementById(msID).innerHTML=='O') {
+          powerO += 1 // If the button currently checking is 'O'
+        }
+        if(document.getElementById(msID).innerHTML=='&nbsp;') {
+          powerHole += 1 // If the button currently checking is '&nbsp'
+        }
+      }
+    }
+    if(jx>=win54-2) {
+      if(powerX>=2) { // HORIZONTAL RIGHT
+        if(powerO==0) {
+          machineBrain=param6 // RIGHT
+        } else {
+          machineBrain=param7 // LEFT
+        }
+      }
+    }
+    msglobalref +=1
+  }
+
+  // powerX can never get larger than 4. Since it started from 0, it can only increase 4 units.
+  // If powerX is already 4 here, this means X already won the game using 1 of the 8 methods above.
+  // so, we'll check the values of powerO and powerHole
+  // If value of power O is bigger than or equal to 1, this means there is O blocking the pathway of X
+
+  /* ===== HORIZONTAL RIGHT ===== */
+  ms1 = msIDno%sqrt54x==0
+  ms2 = msIDno%sqrt54x==sqrt54x-1
+  ms3 = msIDno%sqrt54x==sqrt54x-2
+  ms4 = msIDno%sqrt54x==sqrt54x-3
+  ms5 = msIDno%sqrt54x<=sqrt54x-4
+  msglobal(ms1, ms2, ms3, ms4, ms5, 1, 2)
+
+  /* ===== HORIZONTAL LEFT ===== */
+  ms1 = msIDno%sqrt54x==1
+  ms2 = msIDno%sqrt54x==2
+  ms3 = msIDno%sqrt54x==3
+  ms4 = msIDno%sqrt54x==4
+  ms5 = msIDno%sqrt54x>=5 || msIDno%sqrt54x==0
+  msglobal(ms1, ms2, ms3, ms4, ms5, 2, 1)
+
+  /* ===== VERTICAL UP ===== */
+  ms1 = Math.ceil(msIDno/sqrt54x)==1
+  ms2 = Math.ceil(msIDno/sqrt54x)==2
+  ms3 = Math.ceil(msIDno/sqrt54x)==3
+  ms4 = Math.ceil(msIDno/sqrt54x)==4
+  ms5 = Math.ceil(msIDno/sqrt54x)>=5
+  msglobal(ms1, ms2, ms3, ms4, ms5, 4, 3)
+
+  /* ===== VERTICAL DOWN ===== */
+  ms1 = Math.ceil(msIDno/sqrt54x)==sqrt54x
+  ms2 = Math.ceil(msIDno/sqrt54x)==sqrt54x-1
+  ms3 = Math.ceil(msIDno/sqrt54x)==sqrt54x-2
+  ms4 = Math.ceil(msIDno/sqrt54x)==sqrt54x-3
+  ms5 = Math.ceil(msIDno/sqrt54x)<=sqrt54x-4
+  msglobal(ms1, ms2, ms3, ms4, ms5, 3, 4)
+
+  /* ===== DIAGONAL LEFT UP ===== */
+  ms1 = Math.ceil(msIDno/sqrt54x)>=1 && msIDno%sqrt54x>=1
+  ms2 = Math.ceil(msIDno/sqrt54x)>=2 && msIDno%sqrt54x>=2
+  ms3 = Math.ceil(msIDno/sqrt54x)>=3 && msIDno%sqrt54x>=3
+  ms4 = Math.ceil(msIDno/sqrt54x)>=4 && msIDno%sqrt54x>=4
+  ms5 = Math.ceil(msIDno/sqrt54x)>=5 && msIDno%sqrt54x>=5
+  msglobal(ms1, ms2, ms3, ms4, ms5, 6, 5)
+
+  /* ===== DIAGONAL LEFT DOWN ===== */
+  ms1 = Math.ceil(msIDno/sqrt54x)<=sqrt54x && msIDno%sqrt54x<=0
+  ms2 = Math.ceil(msIDno/sqrt54x)<=sqrt54x-1 && msIDno%sqrt54x<=sqrt54x-1
+  ms3 = Math.ceil(msIDno/sqrt54x)<=sqrt54x-2 && msIDno%sqrt54x<=sqrt54x-2
+  ms4 = Math.ceil(msIDno/sqrt54x)<=sqrt54x-3 && msIDno%sqrt54x<=sqrt54x-3
+  ms5 = Math.ceil(msIDno/sqrt54x)<=sqrt54x-4 && msIDno%sqrt54x<=sqrt54x-4
+  msglobal(ms1, ms2, ms3, ms4, ms5, 5, 6)
+
+  /* ===== DIAGONAL RIGHT UP ===== */
+  ms1 = Math.ceil(msIDno/sqrt54x)>=1 && msIDno%sqrt54x<=0
+  ms2 = Math.ceil(msIDno/sqrt54x)>=2 && msIDno%sqrt54x<=sqrt54x-1
+  ms3 = Math.ceil(msIDno/sqrt54x)>=3 && msIDno%sqrt54x<=sqrt54x-2
+  ms4 = Math.ceil(msIDno/sqrt54x)>=4 && msIDno%sqrt54x<=sqrt54x-3
+  ms5 = Math.ceil(msIDno/sqrt54x)>=5 && msIDno%sqrt54x<=sqrt54x-4
+  msglobal(ms1, ms2, ms3, ms4, ms5, 8,7)
+
+  /* ===== DIAGONAL RIGHT DOWN ===== */
+  ms1 = Math.ceil(msIDno/sqrt54x)<=sqrt54x && msIDno%sqrt54x>=1
+  ms2 = Math.ceil(msIDno/sqrt54x)<=sqrt54x-1 && msIDno%sqrt54x>=2
+  ms3 = Math.ceil(msIDno/sqrt54x)<=sqrt54x-2 && msIDno%sqrt54x>=3
+  ms4 = Math.ceil(msIDno/sqrt54x)<=sqrt54x-3 && msIDno%sqrt54x>=4
+  ms5 = Math.ceil(msIDno/sqrt54x)<=sqrt54x-4 && msIDno%sqrt54x>=5
+  msglobal(ms1, ms2, ms3, ms4, ms5, 7, 8)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* ==== A way to check if anything is wrong - using console log ==== */
+/*  msconsole1 = 'Power X - ' + powerX
+  msconsole2 = 'Power O - ' + powerO
+  msconsole3 = 'PowerHole - ' + powerHole
+  console.log(msconsole1)
+  console.log(msconsole2)
+  console.log(msconsole3) */
+}
 
 console.log('\n\nI started working on this project again on Wednesday Night 03-Feb-2021.\n\nA few things I added to this project are:\n\n1. Make it responsive on Mobile Devices and Tablets. It looked and worked better on all devices now.\n\n2. Re-designing the concepts of some functions to make the loading speed faster.\n\n3. Display a PopUp Modal eveyrtime someone wins (It\'s disabled for now because it doesn\'t look that good and it\'s not neccesary).\n\n4. Undo and Redo buttons. I planned to add FontAwesome Icons to these buttons instead but the min.css file size of FontAwesome was too big which delayed the loading speed.')
+
+console.log('\n\nI finished the defense strategy of player 1 mode - Mon Feb 08 2021 13:51:50 GMT+0700 (Indochina Time).\n\nThe defense is still quite weak but this is how much I\'ll do for now.\n\nPlus, 1 Player Mode only works for Game of 5, so don\'t try changing it to other games.\n\nFor the attack strategy, I\'ll keep it for future me who\'ll be smarter and more experienced to code.\n\n10spr')
